@@ -57,7 +57,7 @@ function getAllNodes(grid) {
   return grid.flat(); 
 }
 
-// Trace shortest path from finishNode to startNode
+
 export function getNodesInShortestPathOrder(finishNode) {
   const path = [];
   let current = finishNode;
