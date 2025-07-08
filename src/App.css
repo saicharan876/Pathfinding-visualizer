@@ -1,0 +1,63 @@
+/* App.css */
+
+.App {
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+  font-family: Arial, sans-serif;
+  overflow: hidden;
+}
+
+.top-controls {
+  width: 250px;
+  padding: 20px;
+  background-color: #f7f7f7;
+  border-right: 2px solid #ddd;
+  box-sizing: border-box;
+}
+
+.select-container {
+  margin-bottom: 20px;
+}
+
+.select-container label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.select-container select {
+  width: 100%;
+  padding: 6px;
+  font-size: 14px;
+}
+
+.button-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.button-group button {
+  background-color: black;
+  color: white;
+  border: none;
+  padding: 10px;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+.button-group button:hover {
+  background-color: #333;
+}
+
+.grid {
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 0px;
+  overflow: hidden;
+}

@@ -5,13 +5,13 @@ import React, {
   useImperativeHandle,
   useRef,
 } from "react";
-import { dijkstra, getNodesInShortestPathOrder } from "../algorithms/dijkstra";
-import { bfs } from "../algorithms/bfs";
-import { getNodesInShortestPathOrder as dfsGetNodesInShortestPathOrder } from "../Algorithms/dfs";
+import { dijkstra, getNodesInShortestPathOrder } from "../Algorithms/dijkstra";
+import { bfs } from "../Algorithms/bfs";
+import { dfs, getNodesInShortestPathOrder as dfsPath } from "../Algorithms/dfs";
 import Node from "./Node/Node";
-import "./PathfindingVisualizer.css";
+import "./path.css";
 
-const ANIMATION_SPEED = 10;
+const ANIMATION_SPEED = 5;
 const PATH_ANIMATION_SPEED = 50;
 
 const PathfindingVisualizer = forwardRef(({ algorithm }, ref) => {
@@ -29,7 +29,8 @@ const PathfindingVisualizer = forwardRef(({ algorithm }, ref) => {
 
   useImperativeHandle(ref, () => ({
     runVisualization,
-    resetGrid,
+    resetGridKeepWalls,
+    resetGridFull,
     setMode,
   }));
 
@@ -39,6 +40,7 @@ const PathfindingVisualizer = forwardRef(({ algorithm }, ref) => {
 
     const freshGrid = resetVisited(grid, start, end);
     setGrid(freshGrid);
+
     const startNode = freshGrid[start.row][start.col];
     const endNode = freshGrid[end.row][end.col];
     let visitedNodesInOrder = [];
@@ -51,28 +53,63 @@ const PathfindingVisualizer = forwardRef(({ algorithm }, ref) => {
         visitedNodesInOrder = bfs(freshGrid, startNode, endNode);
         break;
       case "dfs":
-        visitedNodesInOrder = dfsGetNodesInShortestPathOrder(
-          freshGrid,
-          startNode,
-          endNode
-        );
+        visitedNodesInOrder = dfs(freshGrid, startNode, endNode);
         break;
       default:
         return;
     }
 
-    const shortestPath = getNodesInShortestPathOrder(endNode);
+    const shortestPath =
+      algorithm === "dfs"
+        ? dfsPath(endNode)
+        : getNodesInShortestPathOrder(endNode);
+
+    if (shortestPath.length === 0) {
+      alert("No path found!");
+      setIsVisualizing(false);
+      return;
+    }
+
     animateAlgorithm(visitedNodesInOrder, shortestPath);
   };
 
-  const resetGrid = () => {
+ const resetGridKeepWalls = () => {
+  timeoutIds.current.forEach((id) => clearTimeout(id));
+  timeoutIds.current = [];
+  setIsVisualizing(false);
+
+  const clearedGrid = resetVisited(grid, start, end);
+  setGrid(clearedGrid);
+
+  for (let row of clearedGrid) {
+    for (let node of row) {
+      const el = document.getElementById(`node-${node.row}-${node.col}`);
+      if (!el) continue;
+
+      
+      if (node.isWall) {
+        el.className = "node node-wall";
+      } else if (node.isStart) {
+        el.className = "node node-start";
+      } else if (node.isFinish) {
+        el.className = "node node-finish";
+      } else {
+        el.className = "node";
+      }
+    }
+  }
+};
+
+
+  const resetGridFull = () => {
     timeoutIds.current.forEach((id) => clearTimeout(id));
     timeoutIds.current = [];
     setIsVisualizing(false);
 
-    const clearedGrid = getInitialGrid(start, end);
-    setGrid(clearedGrid);
-    for (let row of clearedGrid) {
+    const fullResetGrid = getInitialGrid(start, end);
+    setGrid(fullResetGrid);
+
+    for (let row of fullResetGrid) {
       for (let node of row) {
         const el = document.getElementById(`node-${node.row}-${node.col}`);
         if (el) el.className = "node";
@@ -124,7 +161,6 @@ const PathfindingVisualizer = forwardRef(({ algorithm }, ref) => {
         const node = path[i];
         if (isStartOrEnd(node)) return;
 
-        // Set isPath = true for this node in grid state
         setGrid((prevGrid) =>
           prevGrid.map((row) =>
             row.map((n) =>
@@ -135,7 +171,6 @@ const PathfindingVisualizer = forwardRef(({ algorithm }, ref) => {
           )
         );
 
-        // Animate visually via class (optional)
         const el = document.getElementById(`node-${node.row}-${node.col}`);
         if (el) el.className = "node node-shortest-path";
 
@@ -173,13 +208,11 @@ const PathfindingVisualizer = forwardRef(({ algorithm }, ref) => {
   );
 });
 
-// ===== Helper Functions =====
-
 const getInitialGrid = (start, end) => {
   const grid = [];
-  for (let row = 0; row < 27; row++) {
+  for (let row = 0; row < 38; row++) {
     const currentRow = [];
-    for (let col = 0; col < 64; col++) {
+    for (let col = 0; col < 58; col++) {
       currentRow.push(createNode(col, row, start, end));
     }
     grid.push(currentRow);
@@ -206,9 +239,10 @@ const resetVisited = (grid, start, end) =>
       distance: Infinity,
       isVisited: false,
       previousNode: null,
+      isPath: false,
       isStart: node.row === start.row && node.col === start.col,
       isFinish: node.row === end.row && node.col === end.col,
-      isPath: false,
+      isWall: node.isWall, // ✅ preserve wall state
     }))
   );
 

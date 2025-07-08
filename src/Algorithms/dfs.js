@@ -45,12 +45,15 @@ export function getNodesInShortestPathOrder(finishNode) {
   const nodesInPath = [];
   let currentNode = finishNode;
 
+  if (!currentNode || !currentNode.previousNode) return [];
+
   while (currentNode !== null) {
-    nodesInPath.unshift(currentNode); 
+    nodesInPath.unshift(currentNode);
     currentNode = currentNode.previousNode;
   }
 
   return nodesInPath;
 }
+
 
 
