@@ -17,8 +17,8 @@ const PATH_ANIMATION_SPEED = 50;
 const PathfindingVisualizer = forwardRef(({ algorithm }, ref) => {
   const [grid, setGrid] = useState([]);
   const [mouseIsPressed, setMouseIsPressed] = useState(false);
-  const [start, setStart] = useState({ row: 10, col: 5 });
-  const [end, setEnd] = useState({ row: 10, col: 45 });
+  const [start, setStart] = useState({ row: 18, col: 10 });
+  const [end, setEnd] = useState({ row: 18, col: 50 });
   const [mode, setMode] = useState("wall");
   const [isVisualizing, setIsVisualizing] = useState(false);
   const timeoutIds = useRef([]);

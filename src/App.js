@@ -18,12 +18,6 @@ function App() {
     }
   };
 
-  const resetGrid = () => {
-    if (visualizerRef.current) {
-      visualizerRef.current.resetGrid();
-    }
-  };
-
   return (
     <div className="App">
       <div className="top-controls">
@@ -40,6 +34,12 @@ function App() {
           </select>
         </div>
 
+        <div className = "RunButton">
+          <button onClick={visualizeAlgorithm}>
+            RUN 
+          </button>
+        </div>
+
         <div className="button-group">
           <button onClick={() => handleModeChange("start")}>Set Start</button>
           <button onClick={() => handleModeChange("end")}>Set End</button>
@@ -50,10 +50,6 @@ function App() {
           </button>
           <button onClick={() => visualizerRef.current.resetGridFull()}>
             Reset Grid (Full)
-          </button>
-
-          <button onClick={visualizeAlgorithm}>
-            Visualize {algorithm.charAt(0).toUpperCase() + algorithm.slice(1)}
           </button>
         </div>
       </div>

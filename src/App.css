@@ -6,41 +6,86 @@
   height: 100vh;
   font-family: Arial, sans-serif;
   overflow: hidden;
+  background-color: black;
 }
 
 .top-controls {
   width: 250px;
   padding: 20px;
-  background-color: #f7f7f7;
+  background-color: black;
   border-right: 2px solid #ddd;
   box-sizing: border-box;
 }
 
 .select-container {
-  margin-bottom: 20px;
+  padding-top: 100px;
+  margin-bottom: 10px;
 }
+
 
 .select-container label {
   display: block;
-  margin-bottom: 5px;
-  font-weight: bold;
+  margin-bottom: 6px;
+  font-weight: 600;
+  font-size: 15px;
+  color: #d0d0d0; 
 }
 
 .select-container select {
   width: 100%;
-  padding: 6px;
+  padding: 8px 12px;
   font-size: 14px;
+  border-radius: 4px;
+  border: 1px solid #444;
+  background-color: #111; 
+  color: #f1f1f1;
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
+.select-container select:hover,
+.select-container select:focus {
+  border-color: #00bcd4; 
+  box-shadow: 0 0 0 2px rgba(0, 188, 212, 0.4);
+}
+
+
 .button-group {
+  padding-top: 30px;
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 
+.RunButton{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 80px;
+  padding-bottom: 40px;
+  scale: 1.5;
+}
+
+.RunButton button{
+  background-color: rgb(0, 255, 0);
+  color: black;
+  border: none;
+  padding: 10px;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+.RunButton button:hover {
+  background-color: #333;
+}
+
+
 .button-group button {
-  background-color: black;
-  color: white;
+  background-color: rgb(255, 255, 0);
+  color: black;
   border: none;
   padding: 10px;
   font-size: 14px;
@@ -58,6 +103,7 @@
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  padding: 0px;
+  padding-left: 20px;
   overflow: hidden;
+
 }
